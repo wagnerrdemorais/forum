@@ -7,6 +7,9 @@ import com.wagnerrdemorais.forum.controller.form.TopicoForm;
 import com.wagnerrdemorais.forum.modelo.Topico;
 import com.wagnerrdemorais.forum.repository.CursoRepository;
 import com.wagnerrdemorais.forum.repository.TopicoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -30,12 +33,17 @@ public class TopicosController {
     }
 
     @GetMapping
-    public List<TopicoDto> lista(String nomeCurso) {
+    public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso,
+                                 @RequestParam() int pagina,
+                                 @RequestParam() int qtd) {
+
+        Pageable pageable = PageRequest.of(pagina, qtd);
+
         if (nomeCurso == null) {
-            List<Topico> topicos = topicoRepository.findAll();
+            Page<Topico> topicos = topicoRepository.findAll(pageable);
             return TopicoDto.converter(topicos);
         } else {
-            List<Topico> topicos = topicoRepository.findByCurso_Nome(nomeCurso);
+            Page<Topico> topicos = topicoRepository.findByCurso_Nome(nomeCurso, pageable);
             return TopicoDto.converter(topicos);
         }
     }
