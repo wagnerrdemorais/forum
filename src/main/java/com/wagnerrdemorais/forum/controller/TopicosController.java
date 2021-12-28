@@ -8,9 +8,9 @@ import com.wagnerrdemorais.forum.modelo.Topico;
 import com.wagnerrdemorais.forum.repository.CursoRepository;
 import com.wagnerrdemorais.forum.repository.TopicoRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -18,7 +18,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -34,12 +33,7 @@ public class TopicosController {
     }
 
     @GetMapping
-    public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso,
-                                 @RequestParam() int pagina,
-                                 @RequestParam() int qtd,
-                                 @RequestParam() String ordenacao) {
-
-        Pageable pageable = PageRequest.of(pagina, qtd, Sort.Direction.DESC, ordenacao);
+    public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
         if (nomeCurso == null) {
             Page<Topico> topicos = topicoRepository.findAll(pageable);
