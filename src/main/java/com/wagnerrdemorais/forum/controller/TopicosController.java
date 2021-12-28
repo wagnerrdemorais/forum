@@ -1,6 +1,8 @@
 package com.wagnerrdemorais.forum.controller;
 
+import com.wagnerrdemorais.forum.controller.dto.TopicoDetalhesDto;
 import com.wagnerrdemorais.forum.controller.dto.TopicoDto;
+import com.wagnerrdemorais.forum.controller.form.AtualizacaoTopicoForm;
 import com.wagnerrdemorais.forum.controller.form.TopicoForm;
 import com.wagnerrdemorais.forum.modelo.Topico;
 import com.wagnerrdemorais.forum.repository.CursoRepository;
@@ -12,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/topicos")
@@ -49,5 +52,20 @@ public class TopicosController {
 
         TopicoDto topicoDto = new TopicoDto(topico);
         return ResponseEntity.created(uri).body(topicoDto);
+    }
+
+    @GetMapping("/{id}")
+    public TopicoDetalhesDto detalhar(@PathVariable Long id) {
+
+        Optional<Topico> topicoOptional = topicoRepository.findById(id);
+        return topicoOptional
+                .map(TopicoDetalhesDto::new)
+                .orElse(null);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TopicoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoTopicoForm form) {
+        Topico topico = form.atualizar(id, topicoRepository);
+        return ResponseEntity.ok(new TopicoDto(topico));
     }
 }
