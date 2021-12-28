@@ -8,8 +8,6 @@ import java.util.List;
 @Entity
 public class Topico {
 
-
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
