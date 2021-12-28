@@ -3,12 +3,26 @@ package com.wagnerrdemorais.forum.controller.form;
 import com.wagnerrdemorais.forum.modelo.Curso;
 import com.wagnerrdemorais.forum.modelo.Topico;
 import com.wagnerrdemorais.forum.repository.CursoRepository;
-import com.wagnerrdemorais.forum.repository.TopicoRepository;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class TopicoForm {
 
+    @NotNull
+    @NotEmpty
+    @Length(min = 3)
     private String titulo;
+
+    @NotNull
+    @NotEmpty
+    @Length(min = 10)
     private String mensagem;
+
+    @NotNull
+    @NotEmpty
+    @Length(min = 5)
     private String nomeCurso;
 
     public String getTitulo() {
