@@ -7,6 +7,7 @@ import com.wagnerrdemorais.forum.controller.form.TopicoForm;
 import com.wagnerrdemorais.forum.modelo.Topico;
 import com.wagnerrdemorais.forum.repository.CursoRepository;
 import com.wagnerrdemorais.forum.repository.TopicoRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -33,6 +34,7 @@ public class TopicosController {
     }
 
     @GetMapping
+    @Cacheable(value = "listaTopicos")
     public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
         if (nomeCurso == null) {
